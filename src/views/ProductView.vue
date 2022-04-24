@@ -13,6 +13,7 @@
             <thead>
               <tr>
                 <th class="text-left heading">Name</th>
+                <th class="text-left heading">Product type</th>
                 <th class="text-left heading">Cost</th>
                 <th class="text-left heading">Address</th>
                 <th class="text-left heading">Created date</th>
@@ -23,6 +24,7 @@
             <tbody>
               <tr v-for="item in getProductList" :key="item.id">
                 <td>{{ item.nameUz }}</td>
+                <td v-for="el in getType(item.productTypeId)" :key="el.id">{{ el.nameUz }}</td>
                 <td>{{ item.cost }}</td>
                 <td>{{ item.address }}</td>
                 <td>{{ formatDate(new Date(item.createdDate)) }}</td>
@@ -47,15 +49,18 @@
       </v-col>
     </v-row>
 
+    <!-- add and update dialog  -->
     <v-dialog
       v-model="dialog"
       scrollable
-      persistent  
+      persistent
       max-width="500px"
       transition="dialog-transition"
     >
       <v-card class="form-card">
-        <v-card-title class="justify-center"> Update Product </v-card-title>
+        <v-card-title class="justify-center">
+          {{ messageDialog }} Product
+        </v-card-title>
         <v-card-text class="pt-4">
           <v-container>
             <v-row align="center">
@@ -118,10 +123,12 @@
                     <v-text-field
                       v-model="date"
                       label="Picker in menu"
-                      prepend-icon="mdi-calendar"
+                      prepend-inner-icon="mdi-calendar"
                       readonly
                       v-bind="attrs"
                       v-on="on"
+                      outlined
+                      small
                     ></v-text-field>
                   </template>
                   <v-date-picker v-model="date" no-title scrollable>
@@ -136,6 +143,7 @@
                 </v-menu>
               </v-col>
             </v-row>
+            <p class="errors" v-if="error">{{ errorMessage }}</p>
           </v-container>
         </v-card-text>
         <v-card-actions>
@@ -146,6 +154,7 @@
       </v-card>
     </v-dialog>
 
+    <!-- confirm delete Product dialog  -->
     <v-dialog v-model="dialogTwo" persistent max-width="400">
       <v-card>
         <v-card-title class="text-h6">
@@ -166,13 +175,22 @@
 </template>
 
 <script>
+// services
+import EventService from "@/services/EventServices.js";
+// store
 import store from "@/store";
 import { mapState } from "vuex";
+// Date formater
 import moment from "moment";
-import EventService from "@/services/EventServices.js";
+// Vuelidate
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
+
 export default {
   name: "ProductView",
-  components: {},
+  setup() {
+    return { v$: useVuelidate() };
+  },
   data() {
     return {
       product: {
@@ -195,6 +213,18 @@ export default {
       messageDialog: "",
       deleteProductId: null,
       date: null,
+      errorMessage: "All field is required!!!",
+      error: false,
+    };
+  },
+  validations() {
+    return {
+      type: { required },
+      product: {
+        nameUz: { required },
+        cost: { required },
+        address: { required },
+      },
     };
   },
   computed: {
@@ -216,6 +246,11 @@ export default {
         return moment(String(value)).format("MM.DD.YYYY");
       }
     },
+    getType(id) {
+      if(this.typeList) {
+        return this.typeList.filter(item => item.id == id)
+      }
+    },
     updateProduct(data) {
       this.product = data;
       this.date = moment(String(new Date(this.product.createdDate))).format(
@@ -226,13 +261,17 @@ export default {
       this.dialog = true;
     },
     async saveChanges() {
+      const result = await this.v$.$validate();
+      if (!result) {
+        this.error = true;
+        return;
+      }
       this.product.productTypeId = this.type;
       this.product.createdDate = this.date;
-      if("id" in this.product) {
+      if ("id" in this.product) {
         await EventService.putProduct(this.product);
-      }
-      else { 
-        await EventService.addProduct(this.product)
+      } else {
+        await EventService.addProduct(this.product);
       }
       await store.dispatch("getList");
       (this.product = {
@@ -248,6 +287,7 @@ export default {
       }),
         (this.dialog = false);
       this.type = null;
+      this.error = false;
     },
     CancelChanges() {
       this.product = {
@@ -292,5 +332,9 @@ th.heading {
 }
 .table-icon {
   cursor: pointer;
+}
+.errors {
+  text-align: center;
+  color: red;
 }
 </style>
