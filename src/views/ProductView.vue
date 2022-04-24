@@ -162,8 +162,8 @@
     <!-- confirm delete Product dialog  -->
     <v-dialog v-model="dialogTwo" persistent max-width="400">
       <v-card>
-        <v-card-title class="text-h6">
-          Are you sure you want to delete {{ messageAlert }}
+        <v-card-title class="text-subtitle-1 alert-message">
+          Are you sure you want to delete  <span>{{ messageAlert }}</span>?
         </v-card-title>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -334,7 +334,7 @@ export default {
 th.heading {
   font-weight: 700;
   color: #222 !important;
-  font-size: 20px !important;
+  font-size: 19px !important;
 }
 .table-icon {
   cursor: pointer;

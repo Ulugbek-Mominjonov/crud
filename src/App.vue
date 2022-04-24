@@ -44,4 +44,11 @@ body {
   clip: rect(0 0 0 0);
   overflow: hidden;
 }
+.alert-message {
+  font-size: 20px;
+  span {
+    margin-left: 5px;
+    color: red;
+  }
+}
 </style>
