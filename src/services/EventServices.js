@@ -1,9 +1,10 @@
 import axios from "axios";
 import applyCaseMiddleware from "axios-case-converter";
 
+// axios case converter 
 const apiClient = applyCaseMiddleware(
   axios.create({
-    baseURL: 'http://94.158.54.194:9092',
+    baseURL: "http://94.158.54.194:9092",
     withCredentials: false,
     headers: {
       Accept: "application/json",
@@ -14,18 +15,18 @@ const apiClient = applyCaseMiddleware(
 
 export default {
   getProducts() {
-    return apiClient.get("/api/product") 
+    return apiClient.get("/api/product");
   },
   putProduct(data) {
-    return apiClient.put("/api/product", data)
+    return apiClient.put("/api/product", data);
   },
   addProduct(data) {
-    return apiClient.post("/api/product", data)
+    return apiClient.post("/api/product", data);
   },
   deleteProduct(id) {
-    return apiClient.delete(`/api/product/${id}`)
+    return apiClient.delete(`/api/product/${id}`);
   },
   getProductType() {
-    return apiClient.get("/api/product/get-product-types")
-  }
+    return apiClient.get("/api/product/get-product-types");
+  },
 };

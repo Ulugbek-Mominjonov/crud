@@ -1,12 +1,15 @@
 <template>
   <v-container class="product-container">
     <v-row>
+      <!-- heading  -->
       <v-col cols="12" class="my-8">
         <v-spacer></v-spacer>
         <v-btn color="info" @click="addItem"
           >Add product <v-icon class="ml-4">mdi-table-plus</v-icon></v-btn
         >
       </v-col>
+
+      <!-- crud table  -->
       <v-col cols="12">
         <v-simple-table>
           <template v-slot:default>
@@ -24,7 +27,9 @@
             <tbody>
               <tr v-for="item in getProductList" :key="item.id">
                 <td>{{ item.nameUz }}</td>
-                <td v-for="el in getType(item.productTypeId)" :key="el.id">{{ el.nameUz }}</td>
+                <td v-for="el in getType(item.productTypeId)" :key="el.id">
+                  {{ el.nameUz }}
+                </td>
                 <td>{{ item.cost }}</td>
                 <td>{{ item.address }}</td>
                 <td>{{ formatDate(new Date(item.createdDate)) }}</td>
@@ -196,7 +201,7 @@ export default {
       product: {
         productTypeId: null,
         nameUz: "",
-        cost: 0,
+        cost: null,
         address: "",
         createdDate: new Date(
           Date.now() - new Date().getTimezoneOffset() * 60000
@@ -233,7 +238,6 @@ export default {
       typeList: "typeList",
     }),
     getProductList() {
-      console.log(this.productList);
       if (this.productList) {
         return this.productList;
       }
@@ -247,8 +251,8 @@ export default {
       }
     },
     getType(id) {
-      if(this.typeList) {
-        return this.typeList.filter(item => item.id == id)
+      if (this.typeList) {
+        return this.typeList.filter((item) => item.id == id);
       }
     },
     updateProduct(data) {
@@ -277,7 +281,7 @@ export default {
       (this.product = {
         productTypeId: null,
         nameUz: "",
-        cost: 0,
+        cost: null,
         address: "",
         createdDate: new Date(
           Date.now() - new Date().getTimezoneOffset() * 60000
@@ -310,7 +314,7 @@ export default {
     },
     delProduct(item) {
       this.deleteProductId = item.id;
-      this.message = item.nameUz;
+      this.messageAlert = item.nameUz;
       this.dialogTwo = true;
     },
     async confirmDelete() {
@@ -325,10 +329,12 @@ export default {
   },
 };
 </script>
+
 <style lang="scss" scoped>
 th.heading {
   font-weight: 700;
   color: #222 !important;
+  font-size: 20px !important;
 }
 .table-icon {
   cursor: pointer;
