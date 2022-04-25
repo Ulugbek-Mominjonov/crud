@@ -232,6 +232,7 @@ export default {
         nameUz: { required },
         cost: { required },
         address: { required },
+        date: {required}
       },
     };
   },
