@@ -228,11 +228,11 @@ export default {
   validations() {
     return {
       type: { required },
+      date: { required },
       product: {
         nameUz: { required },
         cost: { required },
         address: { required },
-        date: {required}
       },
     };
   },
