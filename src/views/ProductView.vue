@@ -154,7 +154,9 @@
         <v-card-actions>
           <v-btn color="warning" @click="CancelChanges()">Cancel</v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="#28235B" dark @click="saveChanges">{{ messageDialog }}</v-btn>
+          <v-btn color="#28235B" dark @click="saveChanges">{{
+            messageDialog
+          }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -163,7 +165,8 @@
     <v-dialog v-model="dialogTwo" persistent max-width="400">
       <v-card>
         <v-card-title class="text-subtitle-1 alert-message">
-          Are you sure you want to delete  <span>{{ messageAlert }}</span>?
+          Are you sure you want to delete <span>{{ messageAlert }}</span
+          >?
         </v-card-title>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -335,6 +338,12 @@ th.heading {
   font-weight: 700;
   color: #222 !important;
   font-size: 19px !important;
+  white-space: nowrap;
+}
+@media screen and (max-width: 600px) {
+  th.heading {
+    font-size: 14px !important;
+  }
 }
 .table-icon {
   cursor: pointer;
