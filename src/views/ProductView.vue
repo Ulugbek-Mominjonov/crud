@@ -154,7 +154,7 @@
         <v-card-actions>
           <v-btn color="warning" @click="CancelChanges()">Cancel</v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="#28235B" dark @click="saveChanges">Save changes</v-btn>
+          <v-btn color="#28235B" dark @click="saveChanges">{{ messageDialog }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -247,7 +247,7 @@ export default {
   methods: {
     formatDate(value) {
       if (value) {
-        return moment(String(value)).format("MM.DD.YYYY");
+        return moment(String(value)).format("DD.MM.YYYY");
       }
     },
     getType(id) {
